@@ -76,13 +76,37 @@ def process(input_image, prompt, a_prompt, n_prompt, num_samples, image_resoluti
 def hello_world():
     photo = request.files.get("photo").read()
     input_image = np.frombuffer(photo, np.uint8)
-    img = cv2.imdecode(input_image, cv2.IMREAD_COLOR)
-    prompt = request.form.get("prompt")
-    a_prompt = request.form.get("a_prompt", "best quality, extremely detailed")
-    n_prompt = request.form.get("n_prompt", "longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality")
-    steps = int(request.form.get("steps", "20"))
-    seed = int(request.form.get("seed", "-1"))
-    results = process(img, prompt, a_prompt, n_prompt, 1, 512, steps, False, 1, 9, seed, 0.0, 100, 200)
+    # input_image,
+    # prompt,
+    # a_prompt,
+    # n_prompt,
+    # num_samples,
+    # image_resolution,
+    # ddim_steps,
+    # guess_mode,
+    # strength,
+    # scale,
+    # seed,
+    # eta,
+    # low_threshold,
+    # high_threshold
+    data = {
+        "input_image":          input_image,
+        "prompt":               request.form.get("prompt"),
+        "num_samples":          int(request.form.get("images", 1)),
+        "image_resolution":     int(request.form.get("image_resolution", 512)),
+        "strength":             int(request.form.get("control_strength", 1)),
+        "guess_mode":           bool(request.form.get("guess_mode", False)),
+        "low_threshold":        int(request.form.get("low_threshold", 1)),
+        "high_threshold":       int(request.form.get("high_threshold", 1)),
+        "ddim_steps":           int(request.form.get("steps", 20)),
+        "scale":                int(request.form.get("guidance_scale", 9)),
+        "seed":                 int(request.form.get("seed", -1)),
+        "eta":                  int(request.form.get("eta", 0)),
+        "a_prompt":             request.form.get("added_prompt", "best quality, extremely detailed"),
+        "n_prompt":             request.form.get("added_prompt", "longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality"),
+    }
+    results = process(**data)
     images = []
     for result in results:
         im, buffer = cv2.imencode('.jpg', result)
