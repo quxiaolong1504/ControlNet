@@ -294,3 +294,8 @@ And these amazing recent projects: [InstructPix2Pix Learning to Follow Image Edi
     }
 
 [Arxiv Link](https://arxiv.org/abs/2302.05543)
+                                                 
+# Run with flask
+```python
+
+```

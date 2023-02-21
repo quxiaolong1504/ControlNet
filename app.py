@@ -78,8 +78,8 @@ def hello_world():
     input_image = np.frombuffer(photo, np.uint8)
     img = cv2.imdecode(input_image, cv2.IMREAD_COLOR)
     prompt = request.form.get("prompt")
-    a_prompt = request.form.get("a_prompt")
-    n_prompt = request.form.get("n_prompt")
+    a_prompt = request.form.get("a_prompt", "best quality, extremely detailed")
+    n_prompt = request.form.get("n_prompt", "longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality")
     steps = int(request.form.get("steps", "20"))
     seed = int(request.form.get("seed", "-1"))
     results = process(img, prompt, a_prompt, n_prompt, 1, 512, steps, False, 1, 9, seed, 0.0, 100, 200)
@@ -89,3 +89,14 @@ def hello_world():
         bimage = base64.b64encode(buffer)
         images.append(bimage.decode())
     return {"images": images}
+
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
+
+
+# ssh root@xxxx
+# sudo su control
+# conda activate control
+# /home/control/apps/ControlNet-main
+# gunicorn --bind 0.0.0.0:7860 -w 1 app:app
