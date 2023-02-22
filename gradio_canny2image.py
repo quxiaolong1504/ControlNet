@@ -93,5 +93,5 @@ with block:
     ips = [input_image, prompt, a_prompt, n_prompt, num_samples, image_resolution, ddim_steps, guess_mode, strength, scale, seed, eta, low_threshold, high_threshold]
     run_button.click(fn=process, inputs=ips, outputs=[result_gallery])
 
-
-block.launch(server_name='0.0.0.0')
+if __name__ == "__main__":
+    block.launch(server_name='0.0.0.0')
